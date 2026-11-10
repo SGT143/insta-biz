@@ -63,6 +63,22 @@ Workflows live at the repo root in `.github/workflows/` (GitHub ignores workflow
 - `sgt-site.yml` runs only when `SGT-site/**` changes: preview on PRs, deploy on push to `main`.
 - Markdown-only changes run nothing (saves Actions minutes; repo is meant to be private).
 
+## Decisions and why (session 2026-11-11)
+
+- **One repo for both sites** (not two). Repo count costs nothing; one repo is simpler to clone and hand off.
+- **CI at repo root, one workflow per site, path filters.** GitHub only runs workflows from the root
+  `.github/workflows/`. Path filters mean a change to one site never runs the other site's jobs,
+  which is the main way to save Actions minutes.
+- **Skip CI for Markdown-only changes**, also to save minutes.
+- **Private repo, both sites on Firebase Hosting, no GitHub Pages.** Pages from a private repo needs a
+  paid GitHub plan; Firebase Hosting free allowance (Blaze plan still includes it) covers a small static site.
+  One service-account secret serves both workflows.
+- **Expected cost: about $0/month.** Private repos get ~2,000 free Actions minutes/month; an InstaBiz
+  run is roughly 5–10 min, so ~250 pushes/month fit. Check https://github.com/pricing for current numbers.
+- **Push over HTTPS with a personal access token.** The token needs Contents + Workflows read/write
+  (without Workflows, GitHub refuses pushes that touch `.github/workflows/`; this happened on the first push).
+- **Java 21 installed as a portable JDK in the home folder** because the first laptop had no sudo.
+
 ## Status / what is left to do
 
 Done:
