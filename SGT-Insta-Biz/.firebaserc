@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "default": "instabiz-dev",
+    "dev": "instabiz-dev"
+  },
+  "targets": {
+    "instabiz-dev": {
+      "hosting": {
+        "sites": ["instabiz-sites-dev"]
+      }
+    }
+  }
+}

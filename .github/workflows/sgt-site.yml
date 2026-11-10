@@ -1,0 +1,46 @@
+name: SGT site
+
+# Static site in SGT-site/, hosted on Firebase Hosting (site "sgt-site-dev" in project instabiz-dev).
+# Runs only when SGT-site files change.
+on:
+  pull_request:
+    paths:
+      - 'SGT-site/**'
+      - '!SGT-site/**/*.md'
+      - '.github/workflows/sgt-site.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'SGT-site/**'
+      - '!SGT-site/**/*.md'
+      - '.github/workflows/sgt-site.yml'
+
+jobs:
+  preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions: { contents: read, pull-requests: write, checks: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_INSTABIZ_DEV }}
+          projectId: instabiz-dev
+          entryPoint: SGT-site
+          target: sgt
+          expires: 7d
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_INSTABIZ_DEV }}
+          projectId: instabiz-dev
+          entryPoint: SGT-site
+          target: sgt
+          channelId: live

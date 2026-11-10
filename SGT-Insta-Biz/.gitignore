@@ -1,0 +1,8 @@
+node_modules/
+functions/node_modules/
+*.log
+.firebase/
+.emulator-data/
+.env
+.env.*
+service-account*.json

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SGT — Our Products</title>
+  <meta name="description" content="SGT builds apps for growers and businesses: GV HarvestiQ and Instabizz.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="brand" aria-label="SGT home">
+        <span class="brand-mark">SGT</span>
+      </a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav-links" class="nav-links">
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="btn btn-small">Contact us</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">SGT</p>
+        <h1>Apps that help you work smarter</h1>
+        <p class="lead">
+          We build simple, reliable apps for farmers and small businesses.
+          Take a look at what we've built so far.
+        </p>
+        <div class="hero-actions">
+          <a href="#products" class="btn">See our products</a>
+          <a href="#contact" class="btn btn-ghost">Talk to us</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Our products</h2>
+          <p>Each one is built to fix a real, everyday problem.</p>
+        </div>
+        <!-- Product cards are generated from js/products.js -->
+        <div id="product-list" class="product-grid"></div>
+      </div>
+    </section>
+
+    <section id="about" class="section section-alt">
+      <div class="container narrow">
+        <h2>About SGT</h2>
+        <p>
+          SGT builds software products that are easy to use and quick to
+          start with. We work closely with our users and keep improving every product
+          based on what they tell us.
+        </p>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container narrow center">
+        <h2>Get in touch</h2>
+        <p>Want a demo, or have a question about one of our apps?</p>
+        <a href="mailto:contact@example.com" class="btn">Email us</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> SGT. All rights reserved.</span>
+      <a href="#">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

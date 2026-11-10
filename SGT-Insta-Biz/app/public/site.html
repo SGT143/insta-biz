@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Travel packages</title>
+  <meta name="description" content="Tour and travel packages. Send an enquiry or chat on WhatsApp.">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <script type="module" src="/js/site.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#top"><img src="/icons/icon-192.png" alt=""><span id="brand-name">Loading…</span></a>
+      <a class="btn btn-small" href="#enquire" id="top-cta" hidden>Enquire</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <div id="loading" class="wrap section">
+      <div class="skeleton" style="min-height:220px;margin-bottom:1rem"></div>
+      <div class="packages"><div class="skeleton"></div><div class="skeleton"></div></div>
+    </div>
+
+    <div id="not-found" class="center-screen" hidden>
+      <div>
+        <h1>Website not found</h1>
+        <p class="muted" id="not-found-msg">We couldn't find a business at this address.</p>
+        <a class="btn" href="/">Go to InstaBiz</a>
+      </div>
+    </div>
+
+    <div id="site" hidden>
+      <section class="hero">
+        <div class="wrap">
+          <span class="eyebrow" id="hero-city"></span>
+          <h1 id="hero-name"></h1>
+          <p id="hero-tagline"></p>
+          <div class="actions">
+            <a class="btn" href="#packages">View packages</a>
+            <a class="btn btn-ghost" id="hero-wa" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="packages">
+        <div class="wrap">
+          <div class="section-head">
+            <h2>Our tour packages</h2>
+            <p class="muted">Prices are per person. Tap "Enquire" and we'll call you back.</p>
+          </div>
+          <div class="packages" id="package-list"></div>
+        </div>
+      </section>
+
+      <section class="section" id="enquire" style="background:var(--surface);border-top:1px solid var(--border)">
+        <div class="wrap contact-grid">
+          <div>
+            <h2>Plan your trip with us</h2>
+            <p class="muted">Tell us where and when you'd like to go. <span id="owner-line"></span></p>
+            <p><a class="btn btn-wa" id="contact-wa" target="_blank" rel="noopener">WhatsApp us</a></p>
+            <p class="muted small">Call: <a id="contact-call"></a></p>
+          </div>
+          <form id="lead-form" class="card card-pad" novalidate>
+            <div id="lead-alert" class="alert" hidden role="status"></div>
+            <div class="field">
+              <label for="l-name">Your name <span class="req">*</span></label>
+              <input class="input" id="l-name" name="name" autocomplete="name" required maxlength="80">
+            </div>
+            <div class="field">
+              <label for="l-phone">Mobile number <span class="req">*</span></label>
+              <div class="input-group">
+                <span class="addon">+91</span>
+                <input class="input" id="l-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" required maxlength="14" placeholder="10-digit number">
+              </div>
+            </div>
+            <div class="field">
+              <label for="l-pkg">Package</label>
+              <select class="input" id="l-pkg" name="packageId">
+                <option value="">Not sure yet / custom trip</option>
+              </select>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="l-date">Travel date</label>
+                <input class="input" id="l-date" name="travelDate" type="date">
+              </div>
+              <div class="field">
+                <label for="l-people">People</label>
+                <input class="input" id="l-people" name="people" type="number" min="1" max="100" value="2" inputmode="numeric">
+              </div>
+            </div>
+            <div class="field">
+              <label for="l-msg">Message</label>
+              <textarea class="input" id="l-msg" name="message" maxlength="1000" placeholder="Anything we should know?"></textarea>
+            </div>
+            <button class="btn btn-block" type="submit" id="lead-submit">Send enquiry on WhatsApp</button>
+            <p class="muted small" style="margin:.75rem 0 0">We save your enquiry and open WhatsApp with the message typed for you.</p>
+          </form>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="wrap">
+          <p id="footer-name"></p>
+          <p>Website by <a href="/">InstaBiz</a></p>
+        </div>
+      </footer>
+
+      <a class="wa-fab" id="fab-wa" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.6 3.6 0 0 0-1.1 2.7 6.3 6.3 0 0 0 1.3 3.3 14.4 14.4 0 0 0 5.5 4.9c2 .9 2.8 1 3.9.8a3.3 3.3 0 0 0 2.1-1.5 2.7 2.7 0 0 0 .2-1.5c0-.1-.3-.2-.6-.4z"/></svg>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

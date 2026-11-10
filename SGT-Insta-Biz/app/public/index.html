@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>InstaBiz — Websites for travel businesses</title>
+  <meta name="description" content="A ready website for your tour & travel business in one minute. Packages, enquiries and WhatsApp built in.">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <script type="module">
+    import { registerSW } from '/js/fb.js';
+    registerSW();
+    let deferred;
+    const btn = document.getElementById('install');
+    addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; btn.hidden = false; });
+    btn.addEventListener('click', async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; btn.hidden = true; });
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="/"><img src="/icons/icon-192.png" alt=""><span>InstaBiz</span></a>
+      <button class="btn btn-small btn-ghost" id="install" hidden>Install app</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow">For tour &amp; travel operators</span>
+        <h1>Your travel business online in one minute</h1>
+        <p>A mobile website with your packages, an enquiry form and WhatsApp, all ready to share with customers.</p>
+        <div class="actions">
+          <a class="btn" href="/onboard">Onboard a business</a>
+          <a class="btn btn-ghost" href="/himalayan-trails">See a demo site</a>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap">
+        <div class="packages">
+          <div class="card card-pad"><h3>Your own address</h3><p class="muted">Every business gets a short link like <strong>yourname.instabiz.in</strong>.</p></div>
+          <div class="card card-pad"><h3>Packages that sell</h3><p class="muted">Show trips with prices, days and highlights. Customers tap "Enquire".</p></div>
+          <div class="card card-pad"><h3>Leads on WhatsApp</h3><p class="muted">Every enquiry is saved and opens WhatsApp with the details already typed.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap">© InstaBiz</div></footer>
+</body>
+</html>

@@ -1,0 +1,81 @@
+name: InstaBiz
+
+# Runs only when InstaBiz files change. Docs-only changes are skipped to save Actions minutes.
+on:
+  pull_request:
+    paths:
+      - 'SGT-Insta-Biz/**'
+      - '!SGT-Insta-Biz/**/*.md'
+      - '.github/workflows/instabiz.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'SGT-Insta-Biz/**'
+      - '!SGT-Insta-Biz/**/*.md'
+      - '.github/workflows/instabiz.yml'
+
+defaults:
+  run:
+    working-directory: SGT-Insta-Biz
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            SGT-Insta-Biz/package-lock.json
+            SGT-Insta-Biz/functions/package-lock.json
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - name: Cache Firebase emulator downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-${{ runner.os }}-v1
+      - run: npm i -g firebase-tools
+      - run: npm ci
+      - run: npm test
+
+  preview:
+    if: github.event_name == 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions: { contents: read, pull-requests: write, checks: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_INSTABIZ_DEV }}
+          projectId: instabiz-dev
+          entryPoint: SGT-Insta-Biz
+          target: sites
+          expires: 7d
+
+  deploy-dev:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            SGT-Insta-Biz/package-lock.json
+            SGT-Insta-Biz/functions/package-lock.json
+      - run: npm i -g firebase-tools
+      - run: npm ci
+      - name: Deploy to instabiz-dev
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_INSTABIZ_DEV }}
+        run: |
+          echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > "$RUNNER_TEMP/sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+          firebase deploy --project dev --non-interactive --force

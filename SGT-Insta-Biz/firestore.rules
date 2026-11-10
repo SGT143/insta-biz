@@ -1,0 +1,69 @@
+rules_version = '2';
+
+// InstaBiz security rules.
+// Businesses and addresses are created only by the onboardBusiness function.
+// The public can read sites and send enquiries; only staff/owners read leads.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function role() { return signedIn() ? request.auth.token.get('role', null) : null; }
+    function isAdmin() { return role() == 'admin'; }
+    function isStaff() { return role() in ['agent', 'admin']; }
+    function isOwner(bid) {
+      return signedIn()
+        && get(/databases/$(database)/documents/businesses/$(bid)).data.ownerUid == request.auth.uid;
+    }
+
+    function optString(d, k, max) {
+      return !(k in d) || (d[k] is string && d[k].size() <= max);
+    }
+
+    function validLead(bid) {
+      let d = request.resource.data;
+      return exists(/databases/$(database)/documents/businesses/$(bid))
+        && d.keys().hasAll(['name', 'phone', 'status', 'createdAt'])
+        && d.keys().hasOnly(['name', 'phone', 'message', 'packageId', 'packageTitle',
+                             'travelDate', 'people', 'status', 'createdAt'])
+        && d.name is string && d.name.size() >= 1 && d.name.size() <= 80
+        && d.phone is string && d.phone.matches('^\\+?[0-9]{10,13}$')
+        && d.status == 'new'
+        && d.createdAt == request.time
+        && optString(d, 'message', 1000)
+        && optString(d, 'packageId', 64)
+        && optString(d, 'packageTitle', 120)
+        && optString(d, 'travelDate', 20)
+        && (!('people' in d) || (d.people is int && d.people >= 1 && d.people <= 100));
+    }
+
+    // Website address -> business. Public so the onboarding form can check availability.
+    match /slugs/{slug} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /businesses/{bid} {
+      allow read: if true;
+      allow write: if false;
+
+      match /packages/{pid} {
+        allow read: if true;
+        allow write: if isAdmin() || isOwner(bid);
+      }
+
+      match /leads/{lid} {
+        allow create: if validLead(bid);
+        allow read: if isStaff() || isOwner(bid);
+        allow update: if (isAdmin() || isOwner(bid))
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+          && request.resource.data.status in ['new', 'contacted', 'booked', 'closed'];
+        allow delete: if false;
+      }
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

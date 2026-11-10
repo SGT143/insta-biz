@@ -1,0 +1,21 @@
+{
+  "name": "instabiz",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "npm --prefix functions install",
+    "dev": "firebase emulators:exec --ui --project instabiz-dev \"npm run seed && npm run demo && node scripts/wait.js\"",
+    "emulators": "firebase emulators:start --project instabiz-dev",
+    "seed": "node scripts/seed.js",
+    "demo": "node scripts/demo.js",
+    "test": "firebase emulators:exec --only auth,firestore,functions --project instabiz-dev \"npm run test:all\"",
+    "test:all": "node --test --test-concurrency=1 \"test/**/*.test.js\"",
+    "test:unit": "node --test test/slug.test.js",
+    "icons": "node scripts/make-icons.js",
+    "deploy:dev": "firebase deploy --project dev"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^4.0.1",
+    "firebase": "^11.0.2"
+  }
+}

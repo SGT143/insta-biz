@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "instabiz-dev"
+  },
+  "targets": {
+    "instabiz-dev": {
+      "hosting": {
+        "sgt": ["sgt-site-dev"]
+      }
+    }
+  }
+}

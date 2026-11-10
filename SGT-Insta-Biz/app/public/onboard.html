@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Onboard a business · InstaBiz</title>
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <script type="module" src="/js/onboard.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap narrow">
+      <a class="brand" href="/"><img src="/icons/icon-192.png" alt=""><span>InstaBiz Onboarding</span></a>
+      <button class="btn-link" id="logout" hidden>Log out</button>
+    </div>
+  </header>
+
+  <main class="wrap narrow page">
+    <div id="dev-note" class="dev-note" hidden>Local mode: using Firebase emulators. OTP codes are filled in for you.</div>
+    <div id="boot" class="center-screen"><p class="muted">Loading…</p></div>
+
+    <!-- 1. Login -->
+    <section id="v-login" hidden>
+      <h1 class="steps-title">Agent login</h1>
+      <p class="muted">Log in with your mobile number. We'll send a one-time code by SMS.</p>
+      <div id="login-alert" class="alert err" hidden role="alert"></div>
+      <form id="phone-form" class="card card-pad" novalidate>
+        <div class="field">
+          <label for="login-phone">Mobile number</label>
+          <div class="input-group">
+            <span class="addon">+91</span>
+            <input class="input" id="login-phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="10-digit number" required>
+          </div>
+        </div>
+        <button class="btn btn-block" id="send-otp" type="submit">Send code</button>
+      </form>
+      <form id="otp-form" class="card card-pad" novalidate hidden>
+        <p>Enter the 6-digit code sent to <strong id="otp-phone"></strong></p>
+        <div class="field">
+          <label for="otp">Code</label>
+          <input class="input" id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="\d{6}" required style="letter-spacing:.4em;font-size:1.4rem;text-align:center">
+        </div>
+        <button class="btn btn-block" id="verify-otp" type="submit">Verify and log in</button>
+        <button class="btn-link" id="change-phone" type="button">Use a different number</button>
+      </form>
+    </section>
+
+    <!-- 2. No role -->
+    <section id="v-denied" class="center-screen" hidden>
+      <div>
+        <h1>Ask the admin for agent access</h1>
+        <p class="muted">You're logged in as <strong id="denied-phone"></strong>, but this number isn't an agent yet. Once the admin adds you, log out and log in again.</p>
+        <button class="btn btn-ghost" id="denied-logout">Log out</button>
+      </div>
+    </section>
+
+    <!-- 3. Form -->
+    <section id="v-form" hidden>
+      <h1 class="steps-title">New travel business</h1>
+      <p class="muted">Fill this with the owner. It takes about a minute.</p>
+      <div id="form-alert" class="alert err" hidden role="alert"></div>
+      <form id="biz-form" class="card card-pad" novalidate>
+        <div class="field">
+          <label for="f-name">Business name <span class="req">*</span></label>
+          <input class="input" id="f-name" autocomplete="organization" maxlength="80" required placeholder="e.g. Sharma Tours & Travels">
+        </div>
+        <div class="field">
+          <label for="f-city">City / area <span class="req">*</span></label>
+          <input class="input" id="f-city" autocomplete="address-level2" maxlength="60" required placeholder="e.g. Jaipur">
+        </div>
+        <div class="field">
+          <label for="f-owner">Owner name <span class="req">*</span></label>
+          <input class="input" id="f-owner" autocomplete="off" maxlength="60" required>
+        </div>
+        <div class="field">
+          <label for="f-phone">Owner WhatsApp number <span class="req">*</span></label>
+          <div class="input-group">
+            <span class="addon">+91</span>
+            <input class="input" id="f-phone" type="tel" inputmode="numeric" autocomplete="off" maxlength="14" required placeholder="10-digit number">
+          </div>
+          <div class="hint" id="phone-hint"></div>
+        </div>
+        <div class="field">
+          <label for="f-slug">Website address <span class="req">*</span></label>
+          <div class="input-group">
+            <input class="input" id="f-slug" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="40" required>
+            <span class="addon">.instabiz.in</span>
+          </div>
+          <div class="hint" id="slug-hint" aria-live="polite"></div>
+          <button type="button" class="btn-link" id="use-suggestion" hidden></button>
+        </div>
+        <button class="btn btn-block" id="submit" type="submit">Create website</button>
+      </form>
+      <p class="muted small" style="margin-top:1rem">Logged in as <span id="me-phone"></span></p>
+    </section>
+
+    <!-- 4. Success -->
+    <section id="v-done" hidden>
+      <div class="card card-pad" style="text-align:center">
+        <div class="success-icon" aria-hidden="true">✓</div>
+        <h1 class="steps-title">Website is live!</h1>
+        <p class="muted" id="done-sub"></p>
+        <div class="link-box" id="done-link"></div>
+        <div class="stack">
+          <a class="btn btn-wa btn-block" id="done-wa" target="_blank" rel="noopener">Send to owner on WhatsApp</a>
+          <a class="btn btn-ghost btn-block" id="done-open" target="_blank" rel="noopener">Open website</a>
+          <button class="btn-link" id="done-again" type="button">Onboard another business</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

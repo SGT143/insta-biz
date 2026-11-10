@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "target": "sgt",
+    "public": ".",
+    "cleanUrls": true,
+    "ignore": ["firebase.json", ".firebaserc", "**/.*", "**/*.md"],
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=300" }]
+      }
+    ]
+  },
+  "emulators": {
+    "hosting": { "port": 5050 }
+  }
+}
